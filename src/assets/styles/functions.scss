@@ -1,0 +1,32 @@
+@mixin max($size) {
+  @media (max-width: #{$size}px) {
+    @content;
+  }
+}
+
+@mixin min($size) {
+  @media (min-width: #{$size}px) {
+    @content;
+  }
+}
+
+@mixin minmax($min, $max) {
+  @media (min-width: #{$min}px) and (max-width: #{$max}px) {
+    @content;
+  }
+}
+
+$browser-context: 16;
+$font-family-suisseintl: "Suisse Intl", Helvetica, Arial, sans-serif;
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@function em($pixels, $context: $browser-context) {
+  @return #{strip-unit($pixels)/$context}em;
+}
+
+@function rem($pixels, $context: $browser-context) {
+  @return #{strip-unit($pixels)/$context}rem;
+}

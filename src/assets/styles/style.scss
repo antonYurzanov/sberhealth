@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import '@/assets/styles/functions.scss';
+
+html {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-size: rem(15px);
+  font-family: 'Roboto', sans-serif;
+  color: #323232;
+  background: #fff;
+  display: block;
+}
+
+a {
+  color: #46C3D2;
+  text-decoration: none;
+  transition: all linear 0.2s;
+}
+
+a:hover {
+  color: #46C3D2;
+  text-decoration: underline;
+}
+
+form, input, select, textarea {
+  padding: 0;
+  margin: 0;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+textarea {
+  overflow: hidden;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+select, input[type='radio'], input[type='checkbox'], input[type='button'], input[type='submit'], label, button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+audio, canvas, progress, video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  transition: all linear 0.2s;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  border: none;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: rem(960px);
+  margin: 0 auto;
+  @include max(960) {
+    padding-left: rem(10px);
+    padding-right: rem(10px);
+  }
+  @include max(720) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
