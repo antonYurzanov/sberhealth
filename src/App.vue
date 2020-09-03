@@ -37,7 +37,7 @@
                   size="30"
                   placeholder="Иван"
                   v-model="order.tab1.name"
-                  :class="{ error: $v.order.tab1.name.$error }"
+                  :class="{ error: $v.order.tab1.name.$error, done: !$v.order.tab1.name.$invalid }"
                   @blur="$v.order.tab1.name.$touch()"
                 )
               li.form-item.w48
@@ -51,7 +51,7 @@
                   size="30"
                   placeholder="Иванов"
                   v-model="order.tab1.surname"
-                  :class="{ error: $v.order.tab1.surname.$error }"
+                  :class="{ error: $v.order.tab1.surname.$error, done: !$v.order.tab1.surname.$invalid }"
                   @blur="$v.order.tab1.surname.$touch()"
                 )
               li.form-item
@@ -65,7 +65,7 @@
                   size="30"
                   placeholder="+79034448889"
                   v-model="order.tab1.phone"
-                  :class="{ error: $v.order.tab1.phone.$error }"
+                  :class="{ error: $v.order.tab1.phone.$error, done: !$v.order.tab1.phone.$invalid }"
                   @blur="$v.order.tab1.phone.$touch()"
                 )
               li.form-item
@@ -79,7 +79,7 @@
                   size="30"
                   placeholder="anton.yurzanov@gmail.com"
                   v-model="order.tab1.email"
-                  :class="{ error: $v.order.tab1.email.$error }"
+                  :class="{ error: $v.order.tab1.email.$error, done: !$v.order.tab1.email.$invalid }"
                   @blur="$v.order.tab1.email.$touch()"
                 )
               li.form-item.w100
@@ -132,7 +132,7 @@
                     id="country"
                     name="country"
                     v-model="order.tab2.country"
-                    :class="{ error: $v.order.tab2.country.$error }"
+                    :class="{ error: $v.order.tab2.country.$error, done: !$v.order.tab2.country.$invalid }"
                     @blur="$v.order.tab2.country.$touch()"
                   )
                     option(
@@ -156,7 +156,7 @@
                     size="30"
                     placeholder="Какой то адрес"
                     v-model="order.tab2.city"
-                    :class="{ error: $v.order.tab2.city.$error }"
+                    :class="{ error: $v.order.tab2.city.$error, done: !$v.order.tab2.city.$invalid }"
                     @blur="$v.order.tab2.city.$touch()"
                   )
                 li.form-item.w30
@@ -170,7 +170,7 @@
                     size="30"
                     placeholder="410000"
                     v-model="order.tab2.zip"
-                    :class="{ error: $v.order.tab2.zip.$error }"
+                    :class="{ error: $v.order.tab2.zip.$error, done: !$v.order.tab2.zip.$invalid }"
                     @blur="$v.order.tab2.zip.$touch()"
                   )
                 li.form-item
@@ -184,7 +184,7 @@
                     size="30"
                     placeholder="Какой то адрес"
                     v-model="order.tab2.address"
-                    :class="{ error: $v.order.tab2.address.$error }"
+                    :class="{ error: $v.order.tab2.address.$error, done: !$v.order.tab2.address.$invalid }"
                     @blur="$v.order.tab2.address.$touch()"
                   )
                 li.form-item
@@ -198,7 +198,7 @@
                     size="30"
                     placeholder="24/12/2020"
                     v-model="order.tab2.date"
-                    :class="{ error: $v.order.tab2.date.$error }"
+                    :class="{ error: $v.order.tab2.date.$error, done: !$v.order.tab2.date.$invalid }"
                     @blur="$v.order.tab2.date.$touch()"
                   )
               li.form-item
@@ -334,6 +334,7 @@ export default {
       if (tab === 1) {
         this.order.tab2.delivery = 'delivery'
         this.order.tab2.country = this.order.tab2.city = this.order.tab2.zip = this.order.tab2.address = this.order.tab2.date = this.order.tab2.cmnt = ''
+        this.$v.order.tab2.$reset()
       }
       this.currentTab = tab
     }
@@ -441,7 +442,15 @@ export default {
   color: inherit;
 
   &.error {
-    border: 1px solid #ff0000;
+    border-color: #ff0000;
+  }
+
+  &.done {
+    border-color: green;
+  }
+
+  &:focus {
+    border-color: #337ab7;
   }
 
   &::placeholder {
@@ -460,7 +469,15 @@ export default {
   color: inherit;
 
   &.error {
-    border: 1px solid #ff0000;
+    border-color: #ff0000;
+  }
+
+  &.done {
+    border-color: green;
+  }
+
+  &:focus {
+    border-color: #337ab7;
   }
 
   &::placeholder {
