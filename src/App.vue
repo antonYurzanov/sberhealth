@@ -345,6 +345,33 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/styles/functions.scss';
 
+$radius: 3px;
+@mixin input {
+  padding: rem(8px) rem(16px);
+  box-sizing: border-box;
+  width: 100%;
+  background: white;
+  border: 1px solid #dddddd;
+  border-radius: $radius;
+  color: inherit;
+
+  &.error {
+    border-color: #ff0000;
+  }
+
+  &.done {
+    border-color: green;
+  }
+
+  &:focus {
+    border-color: #337ab7;
+  }
+
+  &::placeholder {
+    color: #ccc;
+  }
+}
+
 .tabs {
   width: 100%;
   max-width: rem(640px);
@@ -357,10 +384,9 @@ export default {
 .tabs-nav {
   position: relative;
   padding: 0;
-  margin: 0;
+  margin: 0 0 rem(12px) 0;
   list-style: none;
   display: flex;
-  margin-bottom: rem(12px);
 
   &::after {
     position: absolute;
@@ -387,7 +413,7 @@ export default {
   background: #ffffff;
   border: 1px solid rgba(221, 221, 221, 0);
   border-bottom-color: #dddddd;
-  border-radius: 3px 3px 0 0;
+  border-radius: $radius $radius 0 0;
   color: #337ab7;
 
   &:hover {
@@ -433,56 +459,12 @@ export default {
 }
 
 .form-input, .form-select {
-  padding: rem(8px) rem(16px);
-  box-sizing: border-box;
-  width: 100%;
-  background: white;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  color: inherit;
-
-  &.error {
-    border-color: #ff0000;
-  }
-
-  &.done {
-    border-color: green;
-  }
-
-  &:focus {
-    border-color: #337ab7;
-  }
-
-  &::placeholder {
-    color: #ccc;
-  }
+  @include input;
 }
 
 .form-textarea {
-  padding: rem(8px) rem(16px);
-  box-sizing: border-box;
-  width: 100%;
   height: rem(80px);
-  background: white;
-  border: 1px solid #dddddd;
-  border-radius: 3px;
-  color: inherit;
-
-  &.error {
-    border-color: #ff0000;
-  }
-
-  &.done {
-    border-color: green;
-  }
-
-  &:focus {
-    border-color: #337ab7;
-  }
-
-  &::placeholder {
-    color: #ccc;
-  }
+  @include input;
 }
 
 .form-button {
