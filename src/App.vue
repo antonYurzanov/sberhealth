@@ -17,6 +17,7 @@
               :class="{ isActive: currentTab === 2 }"
               @click="selectTab(2)"
               :disabled="$v.order.tab1.$invalid"
+              :aria-hidden="$v.order.tab1.$invalid"
             ) Адрес доставки
         .tab(
           v-if="currentTab === 1"
@@ -38,6 +39,7 @@
                   placeholder="Иван"
                   v-model="order.tab1.name"
                   :class="{ error: $v.order.tab1.name.$error, done: !$v.order.tab1.name.$invalid }"
+                  :aria-invalid="$v.order.tab1.name.$error"
                   @blur="$v.order.tab1.name.$touch()"
                 )
               li.form-item.w48
@@ -52,6 +54,7 @@
                   placeholder="Иванов"
                   v-model="order.tab1.surname"
                   :class="{ error: $v.order.tab1.surname.$error, done: !$v.order.tab1.surname.$invalid }"
+                  :aria-invalid="$v.order.tab1.surname.$error"
                   @blur="$v.order.tab1.surname.$touch()"
                 )
               li.form-item
@@ -66,6 +69,7 @@
                   placeholder="+79034448889"
                   v-model="order.tab1.phone"
                   :class="{ error: $v.order.tab1.phone.$error, done: !$v.order.tab1.phone.$invalid }"
+                  :aria-invalid="$v.order.tab1.phone.$error"
                   @blur="$v.order.tab1.phone.$touch()"
                 )
               li.form-item
@@ -80,6 +84,7 @@
                   placeholder="anton.yurzanov@gmail.com"
                   v-model="order.tab1.email"
                   :class="{ error: $v.order.tab1.email.$error, done: !$v.order.tab1.email.$invalid }"
+                  :aria-invalid="$v.order.tab1.email.$error"
                   @blur="$v.order.tab1.email.$touch()"
                 )
               li.form-item.w100
@@ -87,6 +92,7 @@
                   type="submit"
                   title="Продолжить"
                   :disabled="$v.order.tab1.$invalid"
+                  :aria-hidden="$v.order.tab1.$invalid"
                 ) Продолжить
         .tab(
           v-if="currentTab === 2"
@@ -133,6 +139,7 @@
                     name="country"
                     v-model="order.tab2.country"
                     :class="{ error: $v.order.tab2.country.$error, done: !$v.order.tab2.country.$invalid }"
+                    :aria-invalid="$v.order.tab2.country.$error"
                     @blur="$v.order.tab2.country.$touch()"
                   )
                     option(
@@ -157,6 +164,7 @@
                     placeholder="Какой то адрес"
                     v-model="order.tab2.city"
                     :class="{ error: $v.order.tab2.city.$error, done: !$v.order.tab2.city.$invalid }"
+                    :aria-invalid="$v.order.tab2.city.$error"
                     @blur="$v.order.tab2.city.$touch()"
                   )
                 li.form-item.w30
@@ -171,6 +179,7 @@
                     placeholder="410000"
                     v-model="order.tab2.zip"
                     :class="{ error: $v.order.tab2.zip.$error, done: !$v.order.tab2.zip.$invalid }"
+                    :aria-invalid="$v.order.tab2.zip.$error"
                     @blur="$v.order.tab2.zip.$touch()"
                   )
                 li.form-item
@@ -185,6 +194,7 @@
                     placeholder="Какой то адрес"
                     v-model="order.tab2.address"
                     :class="{ error: $v.order.tab2.address.$error, done: !$v.order.tab2.address.$invalid }"
+                    :aria-invalid="$v.order.tab2.address.$error"
                     @blur="$v.order.tab2.address.$touch()"
                   )
                 li.form-item
@@ -199,6 +209,7 @@
                     placeholder="24/12/2020"
                     v-model="order.tab2.date"
                     :class="{ error: $v.order.tab2.date.$error, done: !$v.order.tab2.date.$invalid }"
+                    :aria-invalid="$v.order.tab2.date.$error"
                     @blur="$v.order.tab2.date.$touch()"
                   )
               li.form-item
@@ -217,6 +228,7 @@
                   type="submit"
                   title="Оформить заказ"
                   :disabled="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
+                  :aria-hidden="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
                 ) Оформить заказ
 </template>
 
