@@ -1,8 +1,11 @@
 <template lang="pug">
   #app
-    PopupComponent(
-      v-if="popupStatus"
-    ) {{ response ? 'успешно отправлено' : 'просьба повторить запрос позже' }}
+    transition(
+      name="fade"
+    )
+      PopupComponent(
+        v-if="popupStatus"
+      ) {{ response ? 'успешно отправлено' : 'просьба повторить запрос позже' }}
     .content
       .tabs
         ul.tabs-nav
@@ -18,172 +21,114 @@
               :disabled="$v.order.tab1.$invalid"
               :aria-hidden="$v.order.tab1.$invalid"
             ) Адрес доставки
-        .tab(
-          v-if="currentTab === 1"
-          :key="'tab_1'"
+        transition(
+          name="fade"
+          mode="out-in"
         )
-          form.form(
-            @submit.prevent="selectTab(2)"
+          .tab(
+            v-if="currentTab === 1"
+            :key="'tab_1'"
           )
-            ul.form-list
-              InputComponent(
-                v-for="el of form"
-                :key="el.id"
-                :id="el.id"
-                :name="el.id"
-                :type="el.type"
-                size="30"
-                :style="{width: el.width}"
-                :placeholder="el.placeholder"
-                :label="el.label"
-                v-model="order.tab1[el.id]"
-                :classError="{ error: $v.order.tab1[el.id].$error, done: !$v.order.tab1[el.id].$invalid }"
-                :aria-invalid="$v.order.tab1[el.id].$error"
-                @blur="$v.order.tab1[el.id].$touch()"
-              )
-              li.form-item.w100
-                button.form-button(
-                  type="submit"
-                  title="Продолжить"
-                  :disabled="$v.order.tab1.$invalid"
-                  :aria-hidden="$v.order.tab1.$invalid"
-                ) Продолжить
-        .tab(
-          v-if="currentTab === 2"
-          :key="'tab_2'"
-        )
-          form.form(
-            @submit.prevent="sendData"
+            form.form(
+              @submit.prevent="selectTab(2)"
+            )
+              ul.form-list
+                InputComponent(
+                  v-for="el of tab1"
+                  :key="el.id"
+                  :id="el.id"
+                  :name="el.id"
+                  :type="el.type"
+                  size="30"
+                  :style="{width: el.width}"
+                  :placeholder="el.placeholder"
+                  :label="el.label"
+                  v-model="order.tab1[el.id]"
+                  :classError="{ error: $v.order.tab1[el.id].$error, done: !$v.order.tab1[el.id].$invalid }"
+                  :aria-invalid="$v.order.tab1[el.id].$error"
+                  @blur="$v.order.tab1[el.id].$touch()"
+                )
+                li.form-item.w100
+                  button.form-button(
+                    type="submit"
+                    title="Продолжить"
+                    :disabled="$v.order.tab1.$invalid"
+                    :aria-hidden="$v.order.tab1.$invalid"
+                  )
+                    span Продолжить
+          .tab(
+            v-else-if="currentTab === 2"
+            :key="'tab_2'"
           )
-            ul.form-list
-              li.form-item
-                .form-radio
-                  input(
-                    id="delivery"
-                    type="radio"
-                    name="delivery"
-                    value="delivery"
-                    checked="true"
-                    v-model="order.tab2.delivery"
-                  )
-                  label(
-                    for="delivery"
-                  ) Доставка
-              li.form-item
-                .form-radio
-                  input(
-                    id="pickup"
-                    type="radio"
-                    name="delivery"
-                    value="pickup"
-                    v-model="order.tab2.delivery"
-                  )
-                  label(
-                    for="pickup"
-                  ) Самовывоз
-              template(
-                v-if="order.tab2.delivery === 'delivery'"
-              )
-                li.form-item.w30
-                  label.form-label(
-                    for="country"
-                  ) Страна
-                  select.form-select(
-                    id="country"
-                    name="country"
-                    v-model="order.tab2.country"
-                    :class="{ error: $v.order.tab2.country.$error, done: !$v.order.tab2.country.$invalid }"
-                    :aria-invalid="$v.order.tab2.country.$error"
-                    @blur="$v.order.tab2.country.$touch()"
-                  )
-                    option(
-                      value=""
-                      selected
-                    ) Не выбрано
-                    option(
-                      value="Россия"
-                    ) Россия
-                    option(
-                      value="Япония"
-                    ) Япония
-                li.form-item.w30
-                  label.form-label(
-                    for="city"
-                  ) Город
-                  input.form-input(
-                    id="city"
-                    name="city"
-                    type="text"
-                    size="30"
-                    placeholder="Какой то адрес"
-                    v-model="order.tab2.city"
-                    :class="{ error: $v.order.tab2.city.$error, done: !$v.order.tab2.city.$invalid }"
-                    :aria-invalid="$v.order.tab2.city.$error"
-                    @blur="$v.order.tab2.city.$touch()"
-                  )
-                li.form-item.w30
-                  label.form-label(
-                    for="zip"
-                  ) Индекс
-                  input.form-input(
-                    id="zip"
-                    name="zip"
-                    type="text"
-                    size="30"
-                    placeholder="410000"
-                    v-model="order.tab2.zip"
-                    :class="{ error: $v.order.tab2.zip.$error, done: !$v.order.tab2.zip.$invalid }"
-                    :aria-invalid="$v.order.tab2.zip.$error"
-                    @blur="$v.order.tab2.zip.$touch()"
-                  )
+            form.form(
+              @submit.prevent="sendData"
+            )
+              ul.form-list
                 li.form-item
-                  label.form-label(
-                    for="address"
-                  ) Адрес
-                  input.form-input(
-                    id="address"
-                    name="address"
-                    type="text"
-                    size="30"
-                    placeholder="Какой то адрес"
-                    v-model="order.tab2.address"
-                    :class="{ error: $v.order.tab2.address.$error, done: !$v.order.tab2.address.$invalid }"
-                    :aria-invalid="$v.order.tab2.address.$error"
-                    @blur="$v.order.tab2.address.$touch()"
-                  )
+                  .form-radio
+                    input(
+                      id="delivery"
+                      type="radio"
+                      name="delivery"
+                      value="delivery"
+                      checked="true"
+                      v-model="order.tab2.delivery"
+                    )
+                    label(
+                      for="delivery"
+                    ) Доставка
                 li.form-item
-                  label.form-label(
-                    for="date"
-                  ) Дата доставки
-                  input.form-input(
-                    id="date"
-                    name="date"
-                    type="text"
-                    size="30"
-                    placeholder="24/12/2020"
-                    v-model="order.tab2.date"
-                    :class="{ error: $v.order.tab2.date.$error, done: !$v.order.tab2.date.$invalid }"
-                    :aria-invalid="$v.order.tab2.date.$error"
-                    @blur="$v.order.tab2.date.$touch()"
+                  .form-radio
+                    input(
+                      id="pickup"
+                      type="radio"
+                      name="delivery"
+                      value="pickup"
+                      v-model="order.tab2.delivery"
+                    )
+                    label(
+                      for="pickup"
+                    ) Самовывоз
+                template(
+                  v-if="order.tab2.delivery === 'delivery'"
+                )
+                  InputComponent(
+                    v-for="el of tab2"
+                    :key="el.id"
+                    :id="el.id"
+                    :name="el.id"
+                    :type="el.type"
+                    :style="{width: el.width}"
+                    :placeholder="el.placeholder"
+                    :label="el.label"
+                    :options="el.options"
+                    v-model="order.tab2[el.id]"
+                    :classError="{ error: $v.order.tab2[el.id].$error, done: !$v.order.tab2[el.id].$invalid }"
+                    :aria-invalid="$v.order.tab2[el.id].$error"
+                    @blur="$v.order.tab2[el.id].$touch()"
                   )
-              li.form-item
-                label.form-label(
-                  for="cmnt"
-                ) Комментарий
-                textarea.form-textarea(
+                InputComponent(
                   id="cmnt"
                   name="cmnt"
-                  cols="5"
-                  rows="20"
+                  label="Комментарий"
                   v-model="order.cmnt"
+                  cols="10"
                 )
-              li.form-item
-                button.form-button(
-                  type="submit"
-                  title="Оформить заказ"
-                  :disabled="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
-                  :aria-hidden="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
-                ) Оформить заказ
+                li.form-item
+                  button.form-button(
+                    type="submit"
+                    title="Оформить заказ"
+                    :disabled="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
+                    :aria-hidden="$v.order.tab1.$invalid || $v.order.tab2.$invalid"
+                  )
+                    img.load(
+                      v-if="load"
+                      src="@/assets/icons/spinner.svg"
+                      alt="Загрузка"
+                    )
+                    span(
+                      v-else
+                    ) Оформить заказ
 </template>
 
 <script>
@@ -196,38 +141,81 @@ export default {
   name: 'App',
   data () {
     return {
-      form: [{
-        width: '48%',
-        label: 'Имя',
-        id: 'name',
-        type: 'text',
-        size: 30,
-        placeholder: 'Иван'
-      },
-      {
-        width: '48%',
-        label: 'Фамилия',
-        id: 'surname',
-        type: 'text',
-        size: 30,
-        placeholder: 'Иванов'
-      },
-      {
-        width: '',
-        label: 'Телефон',
-        id: 'phone',
-        type: 'text',
-        size: 30,
-        placeholder: '+79034448889'
-      },
-      {
-        width: '',
-        label: 'Email',
-        id: 'email',
-        type: 'text',
-        size: 30,
-        placeholder: 'anton.yurzanov@gmail.com'
-      }],
+      tab1: [
+        {
+          width: '48%',
+          label: 'Имя',
+          id: 'name',
+          type: 'text',
+          size: 30,
+          placeholder: 'Иван'
+        },
+        {
+          width: '48%',
+          label: 'Фамилия',
+          id: 'surname',
+          type: 'text',
+          size: 30,
+          placeholder: 'Иванов'
+        },
+        {
+          width: '',
+          label: 'Телефон',
+          id: 'phone',
+          type: 'text',
+          size: 30,
+          placeholder: '+79034448889'
+        },
+        {
+          width: '',
+          label: 'Email',
+          id: 'email',
+          type: 'text',
+          size: 30,
+          placeholder: 'anton.yurzanov@gmail.com'
+        }
+      ],
+      tab2: [
+        {
+          width: '32%',
+          label: 'Страна',
+          id: 'country',
+          options: ['Россия', 'Япония', 'Германия', 'Австралия']
+        },
+        {
+          width: '32%',
+          label: 'Город',
+          id: 'city',
+          type: 'text',
+          size: 30,
+          placeholder: 'Москва'
+        },
+        {
+          width: '32%',
+          label: 'Индекс',
+          id: 'zip',
+          type: 'text',
+          size: 30,
+          placeholder: '410000'
+        },
+        {
+          width: '',
+          label: 'Адрес',
+          id: 'address',
+          type: 'text',
+          size: 30,
+          placeholder: 'Зеленая, 27...'
+        },
+        {
+          width: '',
+          label: 'Дата',
+          id: 'date',
+          type: 'text',
+          size: 30,
+          placeholder: '24/12/2002'
+        }
+      ],
+      load: false,
       popupStatus: false,
       response: '',
       currentTab: 1,
@@ -316,7 +304,9 @@ export default {
   },
   methods: {
     sendData () {
+      this.load = !this.load
       axios.post('/test.php', this.order).then(response => {
+        this.load = !this.load
         this.popupStatus = true
         this.response = response.data.success
         if (response.data.success) {
@@ -328,6 +318,9 @@ export default {
             this.popupStatus = false
           }, 3000)
         }
+      }).catch(e => {
+        console.error(e)
+        this.load = !this.load
       })
     },
     selectTab (tab) {
@@ -413,14 +406,8 @@ export default {
   padding: 0;
   margin: 0 0 rem(16px) 0;
   width: 100%;
-  @include min(600) {
-    &.w30 {
-      width: 30%;
-    }
-
-    &.w48 {
-      width: 48%;
-    }
+  @include max(600) {
+    width: 100% !important;
   }
 }
 
@@ -431,21 +418,17 @@ export default {
   color: #323232;
 }
 
-.form-input, .form-select {
-  @include input;
-}
-
-.form-textarea {
-  height: rem(80px);
-  @include input;
-}
-
 .form-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #ffffff;
   background: #337ab7;
   border-radius: 3px;
-  padding: rem(8px) rem(16px);
+  padding: 0;
   border: 1px solid #337ab7;
+  height: rem(40px);
+  min-width: rem(140px);
 
   &:disabled {
     opacity: 0.5;
@@ -459,6 +442,21 @@ export default {
 
   label {
     padding-left: rem(12px);
+  }
+}
+
+.load {
+  width: rem(16px);
+  height: rem(16px);
+  animation: rotateSpinner 0.4s linear infinite;
+}
+
+@keyframes rotateSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

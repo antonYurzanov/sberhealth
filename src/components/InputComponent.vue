@@ -3,12 +3,37 @@
     label.form-label(
       :for="$attrs.id"
     ) {{ label }}
-    input.form-input(
+    textarea.form-textarea(
+      v-if="$attrs.cols"
+      :cols="$attrs.cols"
+      rows="20"
       v-bind="$attrs"
       :value="value"
       v-on="inputListeners"
       :class="classError"
     )
+    input.form-input(
+      v-if="$attrs.type === 'text'"
+      v-bind="$attrs"
+      :value="value"
+      v-on="inputListeners"
+      :class="classError"
+    )
+    select.form-select(
+      v-if="options.length"
+      v-bind="$attrs"
+      :value="value"
+      v-on="inputListeners"
+      :class="classError"
+    )
+      option(
+        value=""
+        selected
+      ) Не выбрано
+      option(
+        v-for="opt of options"
+        value="opt"
+      ) {{ opt }}
 </template>
 
 <script>
@@ -25,13 +50,14 @@ export default {
       type: String,
       required: true
     },
+    options: {
+      type: Array,
+      default: () => []
+    },
     value: {
       type: String,
       required: true
     }
-  },
-  mounted () {
-    console.log(this.inputListeners)
   },
   computed: {
     inputListeners: function () {
@@ -93,7 +119,12 @@ export default {
   color: #323232;
 }
 
-.form-input {
+.form-input, .form-select {
+  @include input;
+}
+
+.form-textarea {
+  height: rem(80px);
   @include input;
 }
 </style>
