@@ -1,18 +1,13 @@
 <template lang="pug">
   .shadow
     .popup
-      .text {{ status ? 'успешно отправлено' : 'просьба повторить запрос позже' }}
+      .text
+        slot
 </template>
 
 <script>
 export default {
-  name: 'Popup',
-  props: {
-    status: {
-      type: Boolean,
-      required: true
-    }
-  }
+  name: 'PopupComponent'
 }
 </script>
 

@@ -1,9 +1,8 @@
 <template lang="pug">
   #app
-    Popup(
+    PopupComponent(
       v-if="popupStatus"
-      :status="response"
-    )
+    ) {{ response ? 'успешно отправлено' : 'просьба повторить запрос позже' }}
     .content
       .tabs
         ul.tabs-nav
@@ -27,66 +26,21 @@
             @submit.prevent="selectTab(2)"
           )
             ul.form-list
-              li.form-item.w48
-                label.form-label(
-                  for="name"
-                ) Имя
-                input.form-input(
-                  id="name"
-                  name="name"
-                  type="text"
-                  size="30"
-                  placeholder="Иван"
-                  v-model="order.tab1.name"
-                  :class="{ error: $v.order.tab1.name.$error, done: !$v.order.tab1.name.$invalid }"
-                  :aria-invalid="$v.order.tab1.name.$error"
-                  @blur="$v.order.tab1.name.$touch()"
-                )
-              li.form-item.w48
-                label.form-label(
-                  for="surname"
-                ) Фамилия
-                input.form-input(
-                  id="surname"
-                  name="surname"
-                  type="text"
-                  size="30"
-                  placeholder="Иванов"
-                  v-model="order.tab1.surname"
-                  :class="{ error: $v.order.tab1.surname.$error, done: !$v.order.tab1.surname.$invalid }"
-                  :aria-invalid="$v.order.tab1.surname.$error"
-                  @blur="$v.order.tab1.surname.$touch()"
-                )
-              li.form-item
-                label.form-label(
-                  for="phone"
-                ) Телефон
-                input.form-input(
-                  id="phone"
-                  name="phone"
-                  type="text"
-                  size="30"
-                  placeholder="+79034448889"
-                  v-model="order.tab1.phone"
-                  :class="{ error: $v.order.tab1.phone.$error, done: !$v.order.tab1.phone.$invalid }"
-                  :aria-invalid="$v.order.tab1.phone.$error"
-                  @blur="$v.order.tab1.phone.$touch()"
-                )
-              li.form-item
-                label.form-label(
-                  for="email"
-                ) Email
-                input.form-input(
-                  id="email"
-                  name="email"
-                  type="text"
-                  size="30"
-                  placeholder="anton.yurzanov@gmail.com"
-                  v-model="order.tab1.email"
-                  :class="{ error: $v.order.tab1.email.$error, done: !$v.order.tab1.email.$invalid }"
-                  :aria-invalid="$v.order.tab1.email.$error"
-                  @blur="$v.order.tab1.email.$touch()"
-                )
+              InputComponent(
+                v-for="el of form"
+                :key="el.id"
+                :id="el.id"
+                :name="el.id"
+                :type="el.type"
+                size="30"
+                :style="{width: el.width}"
+                :placeholder="el.placeholder"
+                :label="el.label"
+                v-model="order.tab1[el.id]"
+                :classError="{ error: $v.order.tab1[el.id].$error, done: !$v.order.tab1[el.id].$invalid }"
+                :aria-invalid="$v.order.tab1[el.id].$error"
+                @blur="$v.order.tab1[el.id].$touch()"
+              )
               li.form-item.w100
                 button.form-button(
                   type="submit"
@@ -233,7 +187,8 @@
 </template>
 
 <script>
-import Popup from '@/components/Popup.vue'
+import PopupComponent from '@/components/PopupComponent.vue'
+import InputComponent from '@/components/InputComponent.vue'
 import { required, maxLength, minLength, email, numeric } from 'vuelidate/lib/validators'
 import axios from 'axios'
 
@@ -241,6 +196,38 @@ export default {
   name: 'App',
   data () {
     return {
+      form: [{
+        width: '48%',
+        label: 'Имя',
+        id: 'name',
+        type: 'text',
+        size: 30,
+        placeholder: 'Иван'
+      },
+      {
+        width: '48%',
+        label: 'Фамилия',
+        id: 'surname',
+        type: 'text',
+        size: 30,
+        placeholder: 'Иванов'
+      },
+      {
+        width: '',
+        label: 'Телефон',
+        id: 'phone',
+        type: 'text',
+        size: 30,
+        placeholder: '+79034448889'
+      },
+      {
+        width: '',
+        label: 'Email',
+        id: 'email',
+        type: 'text',
+        size: 30,
+        placeholder: 'anton.yurzanov@gmail.com'
+      }],
       popupStatus: false,
       response: '',
       currentTab: 1,
@@ -324,7 +311,8 @@ export default {
     }
   },
   components: {
-    Popup
+    PopupComponent,
+    InputComponent
   },
   methods: {
     sendData () {
@@ -356,33 +344,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/styles/functions.scss';
-
-$radius: 3px;
-@mixin input {
-  padding: rem(8px) rem(16px);
-  box-sizing: border-box;
-  width: 100%;
-  background: white;
-  border: 1px solid #dddddd;
-  border-radius: $radius;
-  color: inherit;
-
-  &.error {
-    border-color: #ff0000;
-  }
-
-  &.done {
-    border-color: green;
-  }
-
-  &:focus {
-    border-color: #337ab7;
-  }
-
-  &::placeholder {
-    color: #ccc;
-  }
-}
 
 .tabs {
   width: 100%;
