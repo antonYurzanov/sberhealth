@@ -11,13 +11,13 @@
         ul.tabs-nav
           li.tabs-nav-item
             button.tabs-nav-button(
-              :class="{ isActive: currentTab === 1 }"
-              @click="selectTab(1)"
+              :class="{ isActive: currentTab === 'main' }"
+              @click="selectTab('main')"
             ) Основные данные
           li.tabs-nav-item
             button.tabs-nav-button(
-              :class="{ isActive: currentTab === 2 }"
-              @click="selectTab(2)"
+              :class="{ isActive: currentTab === 'delivery' }"
+              @click="selectTab('delivery')"
               :disabled="$v.order.tab1.$invalid"
               :aria-hidden="$v.order.tab1.$invalid"
             ) Адрес доставки
@@ -26,11 +26,11 @@
           mode="out-in"
         )
           .tab(
-            v-if="currentTab === 1"
+            v-if="currentTab === 'main'"
             :key="'tab_1'"
           )
             form.form(
-              @submit.prevent="selectTab(2)"
+              @submit.prevent="selectTab('delivery')"
             )
               ul.form-list
                 InputComponent(
@@ -57,7 +57,7 @@
                   )
                     span Продолжить
           .tab(
-            v-else-if="currentTab === 2"
+            v-else-if="currentTab === 'delivery'"
             :key="'tab_2'"
           )
             form.form(
@@ -218,7 +218,7 @@ export default {
       load: false,
       popupStatus: false,
       response: '',
-      currentTab: 1,
+      currentTab: 'main',
       order: {
         tab1: {
           name: '',
@@ -324,7 +324,7 @@ export default {
       })
     },
     selectTab (tab) {
-      if (tab === 1) {
+      if (tab === 'main') {
         this.order.tab2.delivery = 'delivery'
         this.order.tab2.country = this.order.tab2.city = this.order.tab2.zip = this.order.tab2.address = this.order.tab2.date = this.order.tab2.cmnt = ''
         this.$v.order.tab2.$reset()
